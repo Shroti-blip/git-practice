@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+    <form>
+  <label>Email:</label><br>
+  <input type="email" id="email" placeholder="Enter your email">
+  <p id="emailMsg"></p>
+
+  <label>OTP:</label><br>
+  <input type="text" id="otp" maxlength="6" placeholder="Enter OTP">
+  <p id="otpMsg"></p>
+</form>
+
+
+
+<script>
+    const emailInput = document.getElementById("email");
+const emailMsg = document.getElementById("emailMsg");
+
+const otpInput = document.getElementById("otp");
+const otpMsg = document.getElementById("otpMsg");
+
+// ✅ Email validation pattern
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Check email while typing
+emailInput.addEventListener("input", () => {
+  if (emailInput.value === "") {
+    emailMsg.textContent = "";
+  } else if (emailPattern.test(emailInput.value)) {
+    emailMsg.textContent = "✅ Valid email";
+    emailMsg.style.color = "green";
+  } else {
+    emailMsg.textContent = "❌ Invalid email format";
+    emailMsg.style.color = "red";
+  }
+});
+
+// OTP check (for example: must be 6 digits)
+otpInput.addEventListener("input", () => {
+  const otp = otpInput.value;
+  if (otp.length === 0) {
+    otpMsg.textContent = "";
+  } else if (/^\d{6}$/.test(otp)) {
+    otpMsg.textContent = "✅ Valid OTP format";
+    otpMsg.style.color = "green";
+  } else {
+    otpMsg.textContent = "❌ OTP must be 6 digits";
+    otpMsg.style.color = "red";
+  }
+});
+
+</script>
+
+
+</body>
+</html>

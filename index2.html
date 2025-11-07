@@ -3,9 +3,358 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Color Palette Design System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #FA8231;
+            --secondary: #F97F51;
+            --accent: #FF6B9D;
+            --dark: #3D3D3D;
+            --light: #FFF5E6;
+            --coral: #FF6F61;
+            --lavender: #B38BFA;
+            --cyan: #00E5FF;
+            --navy: #0D1B2A;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--navy) 0%, var(--dark) 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            color: var(--light);
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .color-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeInUp 0.6s ease backwards;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .color-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .color-preview {
+            height: 180px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .color-preview::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.2) 100%);
+        }
+
+        .color-info {
+            padding: 25px;
+            color: var(--light);
+        }
+
+        .color-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .color-hex {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            color: var(--cyan);
+            margin-bottom: 12px;
+        }
+
+        .color-description {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            line-height: 1.5;
+        }
+
+        .combo-section {
+            margin-top: 80px;
+        }
+
+        .section-title {
+            color: var(--light);
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .combo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+
+        .combo-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 0.8s ease backwards;
+        }
+
+        .combo-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--light);
+            font-weight: 600;
+        }
+
+        .combo-colors {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .combo-swatch {
+            flex: 1;
+            height: 100px;
+            border-radius: 12px;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .combo-swatch:hover {
+            transform: scale(1.1);
+        }
+
+        .combo-desc {
+            color: var(--light);
+            opacity: 0.85;
+            line-height: 1.6;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .color-card:nth-child(1) { animation-delay: 0.1s; }
+        .color-card:nth-child(2) { animation-delay: 0.2s; }
+        .color-card:nth-child(3) { animation-delay: 0.3s; }
+        .color-card:nth-child(4) { animation-delay: 0.4s; }
+        .color-card:nth-child(5) { animation-delay: 0.5s; }
+        .color-card:nth-child(6) { animation-delay: 0.6s; }
+        .color-card:nth-child(7) { animation-delay: 0.7s; }
+        .color-card:nth-child(8) { animation-delay: 0.8s; }
+        .color-card:nth-child(9) { animation-delay: 0.9s; }
+
+        .combo-card:nth-child(1) { animation-delay: 0.2s; }
+        .combo-card:nth-child(2) { animation-delay: 0.4s; }
+        .combo-card:nth-child(3) { animation-delay: 0.6s; }
+    </style>
 </head>
 <body>
-    <H1> 7 october 2025</H1>
+    <div class="container">
+        <header>
+            <h1>Color Palette Design System</h1>
+            <p class="subtitle">A vibrant collection of warm and cool tones</p>
+        </header>
+
+        <div class="palette-grid">
+            <div class="color-card">
+                <div class="color-preview" style="background: var(--primary);"></div>
+                <div class="color-info">
+                    <div class="color-name">Primary</div>
+                    <div class="color-hex">#FA8231</div>
+                    <div class="color-description">Energetic orange that commands attention and drives action</div>
+                </div>
+            </div>
+
+            <div class="color-card">
+                <div class="color-preview" style="background: var(--secondary);"></div>
+                <div class="color-info">
+                    <div class="color-name">Secondary</div>
+                    <div class="color-hex">#F97F51</div>
+                    <div class="color-description">Warm peachy tone that adds softness and approachability</div>
+                </div>
+            </div>
+
+            <div class="color-card">
+                <div class="color-preview" style="background: var(--accent);"></div>
+                <div class="color-info">
+                    <div class="color-name">Accent</div>
+                    <div class="color-hex">#FF6B9D</div>
+                    <div class="color-description">Playful pink that brings joy and creative energy</div>
+                </div>
+            </div>
+
+            <div class="color-card">
+                <div class="color-preview" style="background: var(--coral);"></div>
+                <div class="color-info">
+                    <div class="color-name">Coral</div>
+                    <div class="color-hex">#FF6F61</div>
+                    <div class="color-description">Living coral that balances warmth with vibrancy</div>
+                </div>
+            </div>
+
+            <div class="color-card">
+                <div class="color-preview" style="background: var(--lavender);"></div>
+                <div class="color-info">
+                    <div class="color-name">Lavender</div>
+                    <div class="color-hex">#B38BFA</div>
+                    <div class="color-description">Dreamy purple that evokes creativity and calm</div>
+                </div>
+            </div>
+
+            <div class="color-card">
+                <div class="color-preview" style="background: var(--cyan);"></div>
+                <div class="color-info">
+                    <div class="color-name">Cyan</div>
+                    <div class="color-hex">#00E5FF</div>
+                    <div class="color-description">Electric cyan that provides crisp contrast and modernity</div>
+                </div>
+            </div>
+
+            <div class="color-card">
+                <div class="color-preview" style="background: var(--navy);"></div>
+                <div class="color-info">
+                    <div class="color-name">Navy</div>
+                    <div class="color-hex">#0D1B2A</div>
+                    <div class="color-description">Deep navy that grounds the palette with sophistication</div>
+                </div>
+            </div>
+
+            <div class="color-card">
+                <div class="color-preview" style="background: var(--dark);"></div>
+                <div class="color-info">
+                    <div class="color-name">Dark</div>
+                    <div class="color-hex">#3D3D3D</div>
+                    <div class="color-description">Neutral charcoal for text and structural elements</div>
+                </div>
+            </div>
+
+            <div class="color-card">
+                <div class="color-preview" style="background: var(--light);"></div>
+                <div class="color-info">
+                    <div class="color-name">Light</div>
+                    <div class="color-hex">#FFF5E6</div>
+                    <div class="color-description">Warm off-white that creates breathing space</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="combo-section">
+            <h2 class="section-title">Recommended Combinations</h2>
+            <div class="combo-grid">
+                <div class="combo-card">
+                    <div class="combo-title">Sunset Vibes</div>
+                    <div class="combo-colors">
+                        <div class="combo-swatch" style="background: var(--primary);"></div>
+                        <div class="combo-swatch" style="background: var(--accent);"></div>
+                        <div class="combo-swatch" style="background: var(--navy);"></div>
+                    </div>
+                    <div class="combo-desc">
+                        Perfect for bold, energetic designs. The warm orange and pink pop beautifully against the deep navy background, creating dynamic contrast with maximum impact.
+                    </div>
+                </div>
+
+                <div class="combo-card">
+                    <div class="combo-title">Electric Dreams</div>
+                    <div class="combo-colors">
+                        <div class="combo-swatch" style="background: var(--lavender);"></div>
+                        <div class="combo-swatch" style="background: var(--cyan);"></div>
+                        <div class="combo-swatch" style="background: var(--dark);"></div>
+                    </div>
+                    <div class="combo-desc">
+                        Futuristic and fresh. The cool lavender and electric cyan create a tech-forward aesthetic that's both calming and exciting, grounded by dark neutrals.
+                    </div>
+                </div>
+
+                <div class="combo-card">
+                    <div class="combo-title">Warm Harmony</div>
+                    <div class="combo-colors">
+                        <div class="combo-swatch" style="background: var(--coral);"></div>
+                        <div class="combo-swatch" style="background: var(--secondary);"></div>
+                        <div class="combo-swatch" style="background: var(--light);"></div>
+                    </div>
+                    <div class="combo-desc">
+                        Soft and inviting. This warm combination creates a friendly, approachable feel perfect for lifestyle brands and welcoming interfaces that prioritize comfort.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

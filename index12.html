@@ -3,9 +3,329 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Hot or Not</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Archivo+Black&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .background-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            pointer-events: none;
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.03) 35px, rgba(255,255,255,.03) 70px);
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .logo {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 64px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            letter-spacing: -2px;
+            text-transform: uppercase;
+            filter: drop-shadow(0 0 30px rgba(240, 147, 251, 0.5));
+        }
+
+        .tagline {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 16px;
+            font-weight: 400;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 50px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 30px;
+            padding: 50px 40px;
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(240, 147, 251, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .profile-image {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0 auto 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.4);
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-name {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-age {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 18px 50px;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Space Grotesk', sans-serif;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-hot {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .btn-hot:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(245, 87, 108, 0.5);
+        }
+
+        .btn-not {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .btn-not:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(79, 172, 254, 0.5);
+        }
+
+        .score {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+        }
+
+        .score-item {
+            text-align: center;
+        }
+
+        .score-number {
+            font-size: 36px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .score-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 5px;
+        }
+
+        .floating-emoji {
+            position: fixed;
+            font-size: 40px;
+            opacity: 0.1;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+    </style>
 </head>
 <body>
-    12 september
+    <div class="background-pattern"></div>
+    
+    <div id="floatingEmojis"></div>
+
+    <div class="container">
+        <div class="logo">Hot or Not</div>
+        <div class="tagline">Rate • Swipe • Decide</div>
+
+        <div class="card">
+            <div class="profile-image">👤</div>
+            <div class="profile-name">Alex Jordan</div>
+            <div class="profile-age">24 • New York</div>
+
+            <div class="buttons">
+                <button class="btn btn-hot" onclick="vote('hot')">
+                    <span>🔥 Hot</span>
+                </button>
+                <button class="btn btn-not" onclick="vote('not')">
+                    <span>❄️ Not</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="score">
+            <div class="score-item">
+                <div class="score-number" id="hotScore">0</div>
+                <div class="score-label">Hot Votes</div>
+            </div>
+            <div class="score-item">
+                <div class="score-number" id="notScore">0</div>
+                <div class="score-label">Not Votes</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let hotCount = 0;
+        let notCount = 0;
+
+        const emojis = ['🔥', '❄️', '💖', '⭐', '✨', '💫', '🌟'];
+        const floatingContainer = document.getElementById('floatingEmojis');
+
+        for (let i = 0; i < 15; i++) {
+            const emoji = document.createElement('div');
+            emoji.className = 'floating-emoji';
+            emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            emoji.style.left = Math.random() * 100 + '%';
+            emoji.style.top = Math.random() * 100 + '%';
+            emoji.style.animation = `float ${3 + Math.random() * 2}s ease-in-out infinite`;
+            emoji.style.animationDelay = Math.random() * 2 + 's';
+            floatingContainer.appendChild(emoji);
+        }
+
+        function vote(type) {
+            if (type === 'hot') {
+                hotCount++;
+                document.getElementById('hotScore').textContent = hotCount;
+                createBurst('🔥');
+            } else {
+                notCount++;
+                document.getElementById('notScore').textContent = notCount;
+                createBurst('❄️');
+            }
+        }
+
+        function createBurst(emoji) {
+            for (let i = 0; i < 8; i++) {
+                const burst = document.createElement('div');
+                burst.textContent = emoji;
+                burst.style.position = 'fixed';
+                burst.style.left = '50%';
+                burst.style.top = '50%';
+                burst.style.fontSize = '30px';
+                burst.style.pointerEvents = 'none';
+                burst.style.zIndex = '1000';
+                document.body.appendChild(burst);
+
+                const angle = (Math.PI * 2 * i) / 8;
+                const velocity = 100 + Math.random() * 50;
+                const tx = Math.cos(angle) * velocity;
+                const ty = Math.sin(angle) * velocity;
+
+                burst.animate([
+                    { transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
+                    { transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0)`, opacity: 0 }
+                ], {
+                    duration: 800,
+                    easing: 'ease-out'
+                }).onfinish = () => burst.remove();
+            }
+        }
+    </script>
 </body>
 </html>

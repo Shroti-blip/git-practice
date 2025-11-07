@@ -1,11 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Color Theme Demo 2</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --lavender: #B38BFA;
+      --electric-cyan: #00E5FF;
+      --dark-bg: #0A0A0F;
+      --text-light: #F5F5F5;
+    }
+
+    body {
+      background-color: var(--dark-bg);
+      color: var(--text-light);
+      font-family: "Poppins", sans-serif;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: linear-gradient(90deg, var(--lavender), var(--electric-cyan));
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+    }
+
+    .navbar-brand {
+      color: var(--dark-bg) !important;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 100px 0;
+      text-align: center;
+      background: radial-gradient(circle at center, rgba(179, 139, 250, 0.15) 0%, transparent 70%);
+    }
+
+    .hero h1 {
+      font-size: 3.2rem;
+      font-weight: 700;
+      color: var(--electric-cyan);
+    }
+
+    .hero span {
+      color: var(--lavender);
+    }
+
+    .hero p {
+      color: #d6d6d6;
+      max-width: 600px;
+      margin: 20px auto;
+      font-size: 1.1rem;
+    }
+
+    .btn-cyan {
+      background-color: var(--electric-cyan);
+      color: var(--dark-bg);
+      font-weight: 600;
+      border: none;
+      transition: 0.3s ease;
+      box-shadow: 0 0 12px rgba(0, 229, 255, 0.5);
+    }
+
+    .btn-cyan:hover {
+      background-color: #19ecff;
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.7);
+    }
+
+    /* Cards */
+    .card {
+      background: linear-gradient(145deg, #12121a, #1a1a26);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      color: var(--text-light);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 0 25px rgba(179, 139, 250, 0.4);
+    }
+
+    .card-title {
+      color: var(--lavender);
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 0;
+      color: #b3b3b3;
+      background-color: #0d0d15;
+    }
+  </style>
 </head>
+
 <body>
-    6 october.
-</body>
-</html>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="#">LumaVerse</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <h1>Step into the <span>Future</span> of Social</h1>
+      <p>Lavender calm meets electric energy — redefining how GenZ connects, creates, and glows online.</p>
+      <button class="btn btn-cyan

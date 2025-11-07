@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hot or Not - Sign Up</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #0e0e0e;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .signup-box {
+      background-color: #1a1a1a;
+      padding: 40px 35px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .signup-box h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-weight: 600;
+      color: #e2e2e2;
+    }
+
+    .form-label {
+      color: #bdbdbd;
+      font-size: 0.9rem;
+    }
+
+    .form-control {
+      background-color: #242424;
+      border: 1px solid #333;
+      color: #fff;
+      border-radius: 8px;
+      padding: 10px 12px;
+      transition: all 0.2s ease;
+    }
+
+    .form-control:focus {
+      border-color: #00bcd4;
+      box-shadow: 0 0 5px rgba(0, 188, 212, 0.5);
+      background-color: #202020;
+      color: #fff;
+    }
+
+    .btn-signup {
+      width: 100%;
+      background-color: #00bcd4;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+
+    .btn-signup:hover {
+      background-color: #0097a7;
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 15px;
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+
+    .login-link a {
+      color: #00bcd4;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="signup-box">
+    <h2>Sign Up</h2>
+    <form method="post" th:action="@{/getotp}" th:object="${user}">
+      <div class="mb-3">
+        <label class="form-label">Username</label>
+        <input type="text" th:field="*{username}" class="form-control" placeholder="Enter your username" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" th:field="*{email}" class="form-control" placeholder="Enter your email" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input type="password" th:field="*{password}" class="form-control" placeholder="Create password" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Gender</label>
+        <select class="form-control" th:field="*{gender}" required>
+          <option value="" disabled selected>Select gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn-signup">Create Account</button>
+
+      <div class="login-link">
+        Already have an account? <a th:href="@{/login}">Login</a>
+      </div>
+    </form>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

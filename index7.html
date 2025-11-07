@@ -3,10 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Sign Up</title>
+    <style>
+        :root {
+            --coral: #FF6F61;
+            --lavender: #B38BFA;
+            --cyan: #00E5FF;
+            --navy: #0D1B2A;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--navy) 0%, #1a2639 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            max-width: 450px;
+            width: 100%;
+            position: relative;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--coral) 0%, var(--lavender) 100%);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            font-size: 0.95em;
+            opacity: 0.95;
+        }
+
+        .form-container {
+            padding: 40px 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--navy);
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.1);
+        }
+
+        .btn-signup {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--cyan) 0%, var(--lavender) 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3);
+        }
+
+        .btn-signup:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 229, 255, 0.4);
+        }
+
+        .btn-signup:active {
+            transform: translateY(0);
+        }
+
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background: #e0e0e0;
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 15px;
+            position: relative;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .social-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .btn-social {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .btn-google {
+            color: var(--coral);
+            border-color: var(--coral);
+        }
+
+        .btn-google:hover {
+            background: var(--coral);
+            color: white;
+        }
+
+        .btn-facebook {
+            color: var(--lavender);
+            border-color: var(--lavender);
+        }
+
+        .btn-facebook:hover {
+            background: var(--lavender);
+            color: white;
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .footer-text a {
+            color: var(--cyan);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer-text a:hover {
+            text-decoration: underline;
+        }
+
+        .accent-bar {
+            height: 4px;
+            background: linear-gradient(90deg, var(--coral) 0%, var(--lavender) 50%, var(--cyan) 100%);
+        }
+    </style>
 </head>
 <body>
-    21st september(vaishnavi's birthday).
-    
+    <div class="container">
+        <div class="accent-bar"></div>
+        <div class="header">
+            <h1>Join Us Today</h1>
+            <p>Create your account and get started</p>
+        </div>
+        
+        <div class="form-container">
+            <form>
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" placeholder="John Doe" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="you@example.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+                
+                <button type="submit" class="btn-signup">Sign Up</button>
+            </form>
+            
+            <div class="divider">
+                <span>or continue with</span>
+            </div>
+            
+            <div class="social-buttons">
+                <button class="btn-social btn-google">Google</button>
+                <button class="btn-social btn-facebook">Facebook</button>
+            </div>
+            
+            <div class="footer-text">
+                Already have an account? <a href="#">Log in</a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

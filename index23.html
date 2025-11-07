@@ -3,10 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Falling Fire Icons</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            background: linear-gradient(135deg, #0a1628 0%, #1a0a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .fire-icon {
+            position: absolute;
+            font-size: 30px;
+            opacity: 0.6;
+            animation: fall linear infinite;
+            filter: drop-shadow(0 0 8px rgba(255, 100, 0, 0.5));
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-50px) rotate(0deg);
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+
+        .fire-icon:nth-child(odd) {
+            animation-duration: 4s;
+        }
+
+        .fire-icon:nth-child(even) {
+            animation-duration: 6s;
+        }
+    </style>
 </head>
 <body>
-    <h1>Lazy one.</h1>
-    
+    <script>
+        const colors = ['#ff4500', '#ff6347', '#ff7f50', '#ff8c00', '#ffa500'];
+        const numberOfFires = 25;
+
+        function createFireIcon() {
+            const fire = document.createElement('div');
+            fire.className = 'fire-icon';
+            fire.textContent = '🔥';
+            
+            fire.style.left = Math.random() * 100 + '%';
+            fire.style.animationDelay = Math.random() * 5 + 's';
+            fire.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            fire.style.opacity = (Math.random() * 0.4 + 0.3);
+            fire.style.fontSize = (Math.random() * 20 + 20) + 'px';
+            
+            document.body.appendChild(fire);
+            
+            fire.addEventListener('animationiteration', () => {
+                fire.style.left = Math.random() * 100 + '%';
+            });
+        }
+
+        for (let i = 0; i < numberOfFires; i++) {
+            createFireIcon();
+        }
+    </script>
 </body>
 </html>

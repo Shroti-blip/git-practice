@@ -3,9 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Hot or Not - Sign Up</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+
+        .signup-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .signup-header {
+            /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .signup-header h2 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 2rem;
+        }
+
+        .signup-header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+        }
+
+        .signup-body {
+            padding: 40px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .form-control, .form-select {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 12px;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+
+        .input-group-text {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-right: none;
+            border-radius: 10px 0 0 10px;
+        }
+
+        .input-group .form-control {
+            border-left: none;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .profile-upload {
+            border: 3px dashed #667eea;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f8f9fa;
+        }
+
+        .profile-upload:hover {
+            background: #e9ecef;
+            border-color: #764ba2;
+        }
+
+        .profile-upload i {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .btn-signup {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 14px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            width: 100%;
+            transition: transform 0.2s;
+        }
+
+        .btn-signup:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        .login-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+   
+    </style>
 </head>
 <body>
-    11 september
+    <div class="signup-container">
+
+        
+        <div class="signup-body">
+            <form id="signupForm">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        <input type="text" class="form-control" id="username" placeholder="Choose a username" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                        <input type="email" class="form-control" id="email" placeholder="your.email@example.com" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        <input type="password" class="form-control" id="password" placeholder="Create a strong password" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="contact" class="form-label">Contact Number</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                        <input type="tel" class="form-control" id="contact" placeholder="+1234567890" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="gender" class="form-label">Gender</label>
+                    <select class="form-select" id="gender" required>
+                        <option value="" selected disabled>Select your gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                        <option value="prefer-not-to-say">Prefer not to say</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="dob" class="form-label">Date of Birth</label>
+                    <input type="date" class="form-control" id="dob" required>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Profile Picture</label>
+                    <div class="profile-upload" onclick="document.getElementById('profilePic').click()">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p class="mb-0"><strong>Click to upload</strong> or drag and drop</p>
+                        <small class="text-muted">PNG, JPG or JPEG (Max 5MB)</small>
+                    </div>
+                    <input type="file" class="d-none" id="profilePic" accept="image/*" onchange="previewImage(event)">
+                    <div id="imagePreview"></div>
+                </div>
+
+                <button type="submit" class="btn btn-signup">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
+
+                <div class="login-link">
+                    Already have an account? <a href="#">Login here</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+  
+
 </body>
 </html>

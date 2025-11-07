@@ -3,9 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Fire Background</title>
+    <style>
+        :root {
+            --dark: #000000;
+            --light: #0a0a0a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--dark) 0%, var(--light) 50%, var(--dark) 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fire-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .fire-icon {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            opacity: 0.18;
+            user-select: none;
+        }
+
+        .fire-icon svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 4px rgba(255, 100, 0, 0.4));
+        }
+
+        .emoji-icon {
+            position: absolute;
+            font-size: 32px;
+            opacity: 0.18;
+            user-select: none;
+            filter: grayscale(0.3);
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            padding: 50px;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            text-align: center;
+            background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 40px;
+            margin-top: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .card p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.85);
+            text-align: center;
+        }
+
+        .button {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 16px rgba(255, 107, 53, 0.3);
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+        }
+    </style>
 </head>
 <body>
-    19 september
+    <div class="fire-layer" id="fireLayer"></div>
+    
+    <div class="content">
+        <h1>Your Application</h1>
+        <div class="card">
+            <p>This is your app interface with a sleek dark theme and subtle fire icons creating an elegant background pattern.</p>
+            <center><button class="button">Get Started</button></center>
+        </div>
+    </div>
+
+    <script>
+        const fireLayer = document.getElementById('fireLayer');
+        const numberOfFires = 55;
+        const numberOfEmojis = 45;
+        
+        const fireSVG = `
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C12 2 7 6 7 11C7 14.31 9.69 17 13 17C16.31 17 19 14.31 19 11C19 8 16 4 16 4C16 4 17 7 15 9C15 9 14 6 12 2Z" fill="#ff6b35" stroke="#ff8c42" stroke-width="0.5"/>
+                <path d="M12 7C12 7 10 9 10 11.5C10 13.43 11.57 15 13.5 15C15.43 15 17 13.43 17 11.5C17 10 15.5 8 15.5 8C15.5 8 16 9.5 15 10.5C15 10.5 14 8.5 12 7Z" fill="#ffa500" stroke="#ffb84d" stroke-width="0.5"/>
+                <path d="M12.5 10C12.5 10 11.5 11 11.5 12C11.5 13.1 12.4 14 13.5 14C14.6 14 15.5 13.1 15.5 12C15.5 11.2 14.5 10 14.5 10C14.5 10 14.8 10.8 14.2 11.3C14.2 11.3 13.5 10.5 12.5 10Z" fill="#ffcc00"/>
+            </svg>
+        `;
+        
+        const emojis = ['🌟', '✨', '💫', '⭐', '🌙', '☄️', '🎯', '🎨', '🎭', '🎪', '🎸', '🎵', '🎶', '💎', '👑', '🏆', '🎮', '🚀', '⚡', '🔮'];
+        
+        for (let i = 0; i < numberOfFires; i++) {
+            const fire = document.createElement('div');
+            fire.className = 'fire-icon';
+            fire.innerHTML = fireSVG;
+            
+            fire.style.left = Math.random() * 100 + '%';
+            fire.style.top = Math.random() * 100 + '%';
+            fire.style.transform = `rotate(${Math.random() * 30 - 15}deg)`;
+            
+            fireLayer.appendChild(fire);
+        }
+
+        for (let i = 0; i < numberOfEmojis; i++) {
+            const emoji = document.createElement('div');
+            emoji.className = 'emoji-icon';
+            emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            
+            emoji.style.left = Math.random() * 100 + '%';
+            emoji.style.top = Math.random() * 100 + '%';
+            emoji.style.transform = `rotate(${Math.random() * 40 - 20}deg)`;
+            
+            fireLayer.appendChild(emoji);
+        }
+    </script>
 </body>
 </html>

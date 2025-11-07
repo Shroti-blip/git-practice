@@ -1,12 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Color Theme Demo 4</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --cyber-mint: #A8FF98;
+      --noir-black: #121212;
+      --text-light: #EAEAEA;
+    }
+
+    body {
+      background-color: var(--noir-black);
+      color: var(--text-light);
+      font-family: "Poppins", sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Navbar */
+    .navbar {
+      background-color: var(--noir-black);
+      border-bottom: 1px solid rgba(168, 255, 152, 0.2);
+      box-shadow: 0 0 20px rgba(168, 255, 152, 0.1);
+    }
+
+    .navbar-brand {
+      color: var(--cyber-mint) !important;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 100px 0;
+      text-align: center;
+      background: radial-gradient(circle at center, rgba(168, 255, 152, 0.1), transparent 70%);
+    }
+
+    .hero h1 {
+      font-size: 3.2rem;
+      font-weight: 700;
+      color: var(--cyber-mint);
+      text-shadow: 0 0 10px rgba(168, 255, 152, 0.5);
+    }
+
+    .hero p {
+      color: #c7c7c7;
+      max-width: 650px;
+      margin: 20px auto;
+      font-size: 1.1rem;
+    }
+
+    .btn-mint {
+      background-color: var(--cyber-mint);
+      color: var(--noir-black);
+      font-weight: 600;
+      border: none;
+      border-radius: 50px;
+      padding: 10px 30px;
+      transition: 0.3s ease;
+      box-shadow: 0 0 12px rgba(168, 255, 152, 0.4);
+    }
+
+    .btn-mint:hover {
+      box-shadow: 0 0 25px rgba(168, 255, 152, 0.7);
+      transform: scale(1.05);
+    }
+
+    /* Cards */
+    .card {
+      background-color: #1A1A1A;
+      border: 1px solid rgba(168, 255, 152, 0.2);
+      border-radius: 15px;
+      color: var(--text-light);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 0 25px rgba(168, 255, 152, 0.3);
+    }
+
+    .card-title {
+      color: var(--cyber-mint);
+      font-weight: 600;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 0;
+      color: #a0a0a0;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      background-color: #0E0E0E;
+    }
+
+    /* Glowing Accent Line */
+    .accent-line {
+      height: 3px;
+      width: 80px;
+      background: var(--cyber-mint);
+      margin: 15px auto;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(168, 255, 152, 0.7);
+    }
+  </style>
 </head>
+
 <body>
-    26 november.
-    
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">NeuroLink</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <h1>Connect in the <span style="color:#fff;">Dark</span> with <br><span style="color:var(--cyber-mint);">Clarity</span></h1>
+      <div class="accent-line"></div>
+      <p>A cyber aesthetic where glowing mint meets deep black — redefining what “cool” feels like in the digital era.</p>
+      <button class="btn btn-mint btn-lg mt-3">Enter the Network</button>
+    </div>
+  </section>
+
+  <!-- Feature Cards -->
+  <div class="container py-5">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card p-4 text-center">
+          <h5 class="card-title">Neon Profiles</h5>
+          <p class="card-text">Every user glows with a personal aura defined by their digital energy.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card p-4 text-center">
+          <h5 class="card-title">Dark Harmony</h5>
+          <p class="card-text">Noir black keeps your focus centered while cyber mint sparks connection.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card p-4 text-center">
+          <h5 class="card-title">AI Driven Feeds</h5>
+          <p class="card-text">An adaptive system that evolves with your digital mood and rhythm.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 NeuroLink | Designed with 💚 in Cyber Mint & Noir Black</p>
+  </footer>
 </body>
 </html>

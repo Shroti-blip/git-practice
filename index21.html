@@ -1,11 +1,207 @@
-<!DOCTYPE html>
+<!-- Falling Fire Dark Page
+     - Gradient navy + dark background
+     - Transparent falling fire icons (emoji/svg)
+     - Responsive and lightweight (CSS + small JS to spawn flames)
+
+     Copy this file and open in a browser to preview.
+-->
+
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Falling Fire — Dark Navy Theme</title>
+  <style>
+    :root{
+      --navy: #0D1B2A; /* Midnight Navy */
+      --deep: #05080A; /* almost black */
+      --accent: #FF6F3C; /* warm flame tint */
+      --glass: rgba(255,255,255,0.04);
+    }
+
+    /* Page reset */
+    *{box-sizing: border-box}
+    html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial}
+
+    /* Gradient background mixing navy + dark */
+    body{
+      background: radial-gradient(1200px 600px at 10% 20%, rgba(11,26,38,0.6), transparent 15%),
+                  linear-gradient(180deg, var(--navy) 0%, var(--deep) 100%);
+      color: #e6eef8;
+      overflow:hidden;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* subtle texture using ::before */
+    body::before{
+      content: "";
+      position:fixed;inset:0;pointer-events:none;
+      background-image: radial-gradient(rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity:0.6;mix-blend-mode:overlay;
+    }
+
+    /* Page content */
+    .wrap{
+      position:relative;z-index:5;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:48px;
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.04);
+      backdrop-filter: blur(6px) saturate(120%);
+      padding:28px 36px;border-radius:14px;max-width:900px;width:100%;text-align:center;box-shadow:0 10px 40px rgba(2,6,10,0.6);
+    }
+
+    h1{margin:0 0 8px;font-size:28px;letter-spacing:-0.2px}
+    p{margin:0;color:rgba(230,238,248,0.78)}
+
+    /* Fire layer (covers the whole viewport) */
+    .fire-layer{
+      pointer-events:none; /* clicks pass through */
+      position:fixed;inset:0;z-index:2;overflow:hidden;
+    }
+
+    /* single flame item */
+    .flame{
+      position:absolute;top:-6%;font-size:28px;opacity:0.85;transform-origin:center center;
+      will-change:transform, opacity;filter:drop-shadow(0 6px 14px rgba(255,110,55,0.18));
+      text-shadow: 0 6px 18px rgba(255,90,30,0.12);
+      mix-blend-mode:screen; /* gives a glow against dark bg */
+      backdrop-filter: blur(2px);
+      -webkit-user-select:none;user-select:none;
+    }
+
+    /* animation: fall (downwards) + slight rotation and horizontal sway */
+    @keyframes fall {
+      0%{transform: translateY(-10vh) rotate(-10deg) scale(0.9); opacity:0}
+      6%{opacity:0.9}
+      50%{opacity:0.95}
+      100%{transform: translateY(115vh) rotate(20deg) scale(1.05); opacity:0}
+    }
+
+    @keyframes sway {
+      0%{transform: translateX(0)}
+      50%{transform: translateX(24px)}
+      100%{transform: translateX(0)}
+    }
+
+    /* variations for size & transparency */
+    .f--small{font-size:16px;opacity:0.6}
+    .f--mid{font-size:24px;opacity:0.78}
+    .f--big{font-size:44px;opacity:0.95}
+
+    /* Utility: different horizontal sway speeds */
+    .s--slow{animation: fall var(--dur) linear forwards, sway calc(var(--dur) / 6) ease-in-out infinite}
+    .s--med{animation: fall var(--dur) linear forwards, sway calc(var(--dur) / 5) ease-in-out infinite}
+    .s--fast{animation: fall var(--dur) linear forwards, sway calc(var(--dur) / 4) ease-in-out infinite}
+
+    /* small responsive tweak */
+    @media (max-width:520px){ .card{padding:18px 20px;border-radius:12px} h1{font-size:20px} }
+
+  </style>
 </head>
 <body>
-    <h3>25  august</h3>
+
+  <div class="fire-layer" id="fireLayer" aria-hidden="true"></div>
+
+  <!-- <main class="wrap"> -->
+    <!-- <section class="card">
+      <h1>Midnight Ember — Dark Navy Theme</h1>
+      <p>Background mixes navy + near-black. Transparent fire icons fall gently across the page for a moody effect.</p>
+      <p style="margin-top:12px;font-size:13px;color:rgba(230,238,248,0.55)">Tip: open devtools to tweak <code>--dur</code> or spawn count in the script below.</p>
+    </section>
+  </main> -->
+
+  <script>
+    /* Small script to spawn flame icons at random positions and timings.
+       It generates a limited number to avoid performance problems.
+    */
+    (function(){
+      const layer = document.getElementById('fireLayer');
+      const maxFlames = 28; // total simultaneous flames created initially
+      const emojiVariants = ['🔥','🔥','🔥','🔥']; // repeated for weight
+
+      function rand(min, max){ return Math.random()*(max-min)+min }
+
+      function createFlame(i){
+        const el = document.createElement('div');
+        el.className = 'flame';
+        // pick size class
+        const size = (i % 6 === 0) ? 'f--big' : (i % 3 === 0) ? 'f--mid' : 'f--small';
+        el.classList.add(size);
+
+        // choose sway speed class
+        const speed = (Math.random()>0.66)? 's--fast' : (Math.random()>0.33)? 's--med' : 's--slow';
+        el.classList.add(speed);
+
+        // random horizontal start
+        const x = rand(-8, 108); // allow slightly offscreen starts
+        el.style.left = x + '%';
+
+        // duration variable (CSS uses var(--dur))
+        const dur = rand(6, 16);
+        el.style.setProperty('--dur', dur + 's');
+
+        // horizontal offset to vary sway amplitude
+        const hueShift = Math.round(rand(-12,12));
+        el.style.transform = `translateY(-10vh)`;
+
+        // set content with a subtle wrapper span (so we can colorize if needed)
+        const flameChar = emojiVariants[Math.floor(rand(0, emojiVariants.length))];
+        el.innerHTML = `<span aria-hidden="true">${flameChar}</span>`;
+
+        // Slight color tint using text-shadow and opacity; use mix-blend-mode to blend into background
+        el.style.opacity = (parseFloat(getComputedStyle(el).opacity) * rand(0.6, 1)).toFixed(2);
+
+        layer.appendChild(el);
+
+        // Remove element after its animation ends to keep DOM clean
+        setTimeout(()=>{
+          el.remove();
+          // optionally spawn a replacement to keep background lively
+          spawnFlameDelayed();
+        }, dur * 1000 + 300);
+      }
+
+      function spawnFlameDelayed(){
+        // spawn a single flame after a short random delay
+        setTimeout(()=>{
+          createFlame(Math.floor(rand(0,12)));
+        }, rand(300, 2200));
+      }
+
+      // initial burst
+      for(let i=0;i<maxFlames;i++){
+        // stagger initial creation slightly so they don't all fall at once
+        setTimeout(()=> createFlame(i), i * 120);
+      }
+
+      // continuous gentle spawns to maintain effect
+      setInterval(()=>{
+        if(layer.children.length < 18) createFlame(Math.floor(rand(0,12)));
+      }, 900);
+
+      // Accessibility: remove animations if user prefers reduced motion
+      const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+      if(mq.matches){
+        // clear everything and create a few static faint flames
+        layer.innerHTML='';
+        for(let i=0;i<6;i++){
+          const el = document.createElement('div');
+          el.className = 'flame f--small';
+          el.style.left = (i*16 + 6) + '%';
+          el.style.top = (20 + i*6) + '%';
+          el.style.opacity = '0.25';
+          el.innerText = '🔥';
+          layer.appendChild(el);
+        }
+      }
+
+    })();
+  </script>
+
 </body>
 </html>
