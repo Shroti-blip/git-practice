@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide Notification Popup</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Slide-in popup container */
+        #slideNotify {
+            position: fixed;
+            top: 20px;
+            right: -350px; /* hidden initially */
+            transition: all 0.6s ease-in-out;
+            z-index: 9999;
+            width: 300px;
+        }
+
+        /* show class makes it slide in */
+        #slideNotify.show {
+            right: 20px;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+
+<!-- OPTIONAL TEST BUTTON -->
+<div class="container text-center mt-5">
+    <button class="btn btn-dark" onclick="testPopup()">Test Notification</button>
+</div>
+
+
+<!-- ===============================
+       SLIDE-IN NOTIFICATION POPUP
+================================ -->
+<div id="slideNotify">
+    <div class="alert alert-success shadow-lg d-flex">
+        <strong class="me-1">Success!</strong>
+        <span id="notifyMsg">Welcome!</span>
+    </div>
+</div>
+
+
+<!-- ===============================
+       AUTO POPUP SCRIPT (Thymeleaf)
+================================ -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    let message = /*[[${notifyMessage}]]*/ null;
+
+    if (message) {
+        showSlidePopup(message);
+    }
+});
+
+/* Function to show popup */
+function showSlidePopup(message) {
+    const popup = document.getElementById("slideNotify");
+    document.getElementById("notifyMsg").innerText = message;
+
+    popup.classList.add("show");
+
+    // hide after 3 sec
+    setTimeout(() => {
+        popup.classList.remove("show");
+    }, 3000);
+}
+
+/* Test button function */
+function testPopup() {
+    showSlidePopup("Logged in successfully!");
+}
+</script>
+
+</body>
+</html>

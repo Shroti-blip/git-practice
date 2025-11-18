@@ -1,717 +1,83 @@
-
-
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rate Photos - HotOrNot</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css" rel="stylesheet">
+    <title>Success Popup</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* Success icon animation */
+        .success-icon i {
+            font-size: 65px;
+            color: #28a745;
+            animation: pop 0.4s ease-in-out;
         }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #0a0a0a;
-            color: #ffffff;
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        .bg-gradient {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
-
-        .bg-gradient::before,
-        .bg-gradient::after,
-        .bg-gradient span {
-            content: '';
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-        }
-
-        .bg-gradient::before {
-            width: 500px;
-            height: 500px;
-            background: rgba(255, 0, 128, 0.2);
-            animation: float1 20s ease-in-out infinite;
-        }
-
-        .bg-gradient::after {
-            width: 600px;
-            height: 600px;
-            background: rgba(0, 255, 255, 0.15);
-            animation: float2 25s ease-in-out infinite;
-        }
-
-        .bg-gradient span {
-            width: 400px;
-            height: 400px;
-            background: rgba(255, 255, 0, 0.12);
-            animation: float3 18s ease-in-out infinite;
-        }
-
-        @keyframes float1 {
-            0%, 100% { transform: translate(10vw, 20vh) scale(1); }
-            25% { transform: translate(60vw, 70vh) scale(1.2); }
-            50% { transform: translate(80vw, 30vh) scale(0.9); }
-            75% { transform: translate(30vw, 80vh) scale(1.1); }
-        }
-
-        @keyframes float2 {
-            0%, 100% { transform: translate(70vw, 60vh) scale(1); }
-            33% { transform: translate(20vw, 20vh) scale(1.3); }
-            66% { transform: translate(50vw, 80vh) scale(0.8); }
-        }
-
-        @keyframes float3 {
-            0%, 100% { transform: translate(40vw, 10vh) scale(1); }
-            30% { transform: translate(10vw, 70vh) scale(1.2); }
-            60% { transform: translate(75vw, 50vh) scale(0.9); }
-            90% { transform: translate(55vw, 15vh) scale(1.1); }
-        }
-
-        .navbar {
-            background: rgba(10, 10, 10, 0.8) !important;
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .navbar-brand {
-            font-size: 1.8rem;
-            font-weight: 900;
-            letter-spacing: -1px;
-        }
-
-        .logo-hot {
-            background: linear-gradient(135deg, #ff0080, #ff8c00);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .logo-not {
-            color: #00ffff;
-        }
-
-        .nav-link {
-            color: rgba(255, 255, 255, 0.8) !important;
-            font-weight: 500;
-            transition: color 0.3s ease;
-            position: relative;
-            margin: 0 0.5rem;
-        }
-
-        .nav-link:hover {
-            color: #ff0080 !important;
-        }
-
-        .btn-neon {
-            background: linear-gradient(135deg, #ff0080, #ff8c00);
-            color: white;
-            border: none;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 0 20px rgba(255, 0, 128, 0.5);
-            transition: all 0.3s ease;
-        }
-
-        .btn-neon:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(255, 0, 128, 0.8);
-            color: white;
-        }
-
-        .main-container {
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 1rem;
-        }
-
-        .rating-card {
-            margin-bottom: 2rem;
-            position: relative;
-            scroll-snap-align: start;
-        }
-
-        .image-wrapper {
-            position: relative;
-            width: 100%;
-            height: 100vh;
-            max-height: 700px;
-            border-radius: 30px;
-            overflow: hidden;
-            background: linear-gradient(135deg, rgba(255, 0, 128, 0.2), rgba(0, 255, 255, 0.2));
-        }
-
-        .phuljhari-border {
-            position: absolute;
-            top: -6px;
-            left: -6px;
-            right: -6px;
-            bottom: -6px;
-            border-radius: 36px;
-            background: linear-gradient(135deg, #ff0080, #ff8c00, #ffd32a, #00ff88, #00ffff);
-            z-index: 1;
-            opacity: 0;
-            filter: blur(8px);
-            animation: sparkle 1.5s ease-in-out infinite;
-            pointer-events: none;
-        }
-
-        .phuljhari-border.active {
-            opacity: 1;
-        }
-
-        @keyframes sparkle {
-            0%, 100% { opacity: 0.8; filter: blur(8px) brightness(1); }
-            50% { opacity: 1; filter: blur(12px) brightness(1.3); }
-        }
-
-        .image-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            position: relative;
-            z-index: 2;
-            border-radius: 30px;
-        }
-
-        .image-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 30px 20px 20px;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4), transparent);
-            z-index: 3;
-            border-radius: 0 0 30px 30px;
-        }
-
-        .overlay-content {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            padding: 20px;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 15px;
-        }
-
-        .avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #ff0080, #00ffff);
-            border: 3px solid rgba(255, 255, 255, 0.5);
-        }
-
-        .username {
-            font-weight: 700;
-            color: #ffffff;
-            font-size: 1.2rem;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .caption {
-            color: rgba(255, 255, 255, 0.95);
-            font-size: 0.95rem;
-            line-height: 1.5;
-            margin-bottom: 10px;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-        }
-
-        .hashtags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .hashtag {
-            background: rgba(0, 255, 255, 0.2);
-            border: 1px solid rgba(0, 255, 255, 0.4);
-            color: #00ffff;
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .timer-container {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 400px;
-            z-index: 10;
-        }
-
-        .progress-container {
-            width: 100%;
-            height: 12px;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            overflow: hidden;
-            position: relative;
-            border: 2px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg,
-                #ff0080 0%,
-                #ff4757 20%,
-                #ff8c00 40%,
-                #ffd32a 60%,
-                #00ff88 80%,
-                #00ffff 100%
-            );
-            transition: width 1s linear;
-            box-shadow: 0 0 20px rgba(255, 0, 128, 0.8), 0 0 40px rgba(0, 255, 255, 0.6);
-            position: relative;
-            border-radius: 20px;
-        }
-
-        .progress-bar::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 50%;
-            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), transparent);
-            border-radius: 20px 20px 0 0;
-        }
-
-        .progress-bar::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            right: 0;
-            width: 30px;
-            height: 30px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.8) 40%, transparent 70%);
-            transform: translate(50%, -50%);
-            filter: blur(3px);
-            animation: pulse-glow 1.5s ease-in-out infinite;
-        }
-
-        @keyframes pulse-glow {
-            0%, 100% {
-                opacity: 0.6;
-                transform: translate(50%, -50%) scale(1);
-            }
-            50% {
-                opacity: 1;
-                transform: translate(50%, -50%) scale(1.3);
-            }
-        }
-
-        .thermometer-container {
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 60px;
-            height: 40%;
-            max-height: 300px;
-            z-index: 10;
-        }
-
-        .thermometer {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 255, 255, 0.1);
-            border: 2px solid #00ffff;
-            border-radius: 30px;
-            cursor: pointer;
-            overflow: hidden;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .thermometer:hover {
-            background: rgba(0, 255, 255, 0.2);
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
-        }
-
-        .thermometer.disabled {
-            pointer-events: none;
-            opacity: 0.5;
-        }
-
-        .thermometer-fill {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, #ff0080, #ff4757, #ff8c00, #ffd32a, #00ff88);
-            transition: height 0.3s ease;
-            border-radius: 0 0 30px 30px;
-        }
-
-        .thermometer-bulb {
-            position: absolute;
-            bottom: -18px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 50px;
-            height: 50px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 50%;
-            box-shadow: 0 0 20px rgba(255, 0, 128, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2;
-        }
-
-        .thermometer-bulb-inner {
-            width: 35px;
-            height: 35px;
-            background: linear-gradient(135deg, #ff0080, #ff4757);
-            border-radius: 50%;
-            transition: background 0.3s ease;
-        }
-
-        .scale-markers {
-            position: absolute;
-            left: 8px;
-            top: 10px;
-            bottom: 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            font-size: 10px;
-            color: #000;
-            font-weight: 700;
-            text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
-            z-index:300;
-        }
-
-        .rating-badge {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: linear-gradient(135deg, #ff0080, #ff8c00);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-weight: 800;
-            font-size: 1.3rem;
-            box-shadow: 0 0 30px rgba(255, 0, 128, 0.6);
-            z-index: 10;
-            display: none;
-        }
-
-        .rating-badge.show {
-            display: block;
-            animation: popIn 0.3s ease-out;
-        }
-
-        @keyframes popIn {
+        @keyframes pop {
             0% { transform: scale(0); }
-            50% { transform: scale(1.2); }
+            80% { transform: scale(1.15); }
             100% { transform: scale(1); }
-        }
-
-        .locked-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-            border-radius: 30px;
-            z-index: 4;
-            display: none;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .locked-overlay.show {
-            display: flex;
-        }
-
-        .locked-icon {
-            font-size: 4rem;
-            color: #00ffff;
-            text-shadow: 0 0 30px rgba(0, 255, 255, 0.8);
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @media (max-width: 576px) {
-            .thermometer-container {
-                width: 50px;
-                height: 50%;
-            }
-
-            .username {
-                font-size: 1rem;
-            }
-
-            .caption {
-                font-size: 0.9rem;
-            }
         }
     </style>
 </head>
-<body>
-<div class="bg-gradient">
-    <span></span>
+
+<body class="bg-light">
+
+<!-- OPTIONAL BUTTON TO TEST POPUP -->
+<div class="container text-center mt-5">
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#successPopup">
+        Test Popup
+    </button>
 </div>
 
-<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
-    <div class="container-fluid px-4">
-        <a class="navbar-brand" href="#">
-            <span class="logo-hot">Hot</span><span class="logo-not">Or</span><span class="logo-hot">Not</span>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto align-items-center">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Discover</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="#">Rate</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Matches</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/add-new-post">Add new Post</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/logout">Logout</a>
-                </li>
-                <li class="nav-item ms-3">
-                    <button class="btn btn-neon btn-sm rounded-pill px-4">Join Now</button>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
 
-<div class="main-container">
-    <div th:each="post : ${posts}" class="rating-card" th:attr="data-id=${post.postId}">
-        <div class="image-wrapper">
-            <div class="phuljhari-border"></div>
-            <img th:src="@{/userphoto/{id}(id=${post.postId})}" alt="Profile">
+<!-- ===============================
+       SUCCESS POPUP MODAL
+================================ -->
+<div class="modal fade" id="successPopup" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-4 text-center">
 
-            <!-- Timer Section -->
-            <div class="timer-container">
-                <div class="timer-text">10s</div>
-                <div class="progress-container">
-                    <div class="progress-bar"></div>
-                </div>
+            <div class="success-icon mb-3">
+                <i class="bi bi-check-circle-fill"></i>
             </div>
 
-            <div class="rating-badge">5</div>
-            <div class="locked-overlay">
-                <div class="locked-icon">🔒</div>
-            </div>
+            <h4 class="text-success fw-bold">Success!</h4>
+            <p id="successMsg" class="mt-2"></p>
 
-            <div class="thermometer-container">
-                <div class="thermometer">
-                    <div class="scale-markers">
-                        <div>10</div>
-                        <div>8</div>
-                        <div>6</div>
-                        <div>4</div>
-                        <div>2</div>
-                    </div>
-                    <div class="thermometer-fill"></div>
-                    <div class="thermometer-bulb">
-                        <div class="thermometer-bulb-inner"></div>
-                    </div>
-                </div>
-            </div>
+            <button class="btn btn-success mt-3 px-4" data-bs-dismiss="modal">Okay</button>
 
-            <form class="postRatingForm">
-                <input type="hidden" id="userFrom" name="userFrom" th:value="${user_master.userId}">
-                <input type="hidden" id="userTo" name="userTo" th:value="${post.user.userId}">
-                <input type="hidden" name="postId" th:value="${post.postId}">
-            </form>
-
-            <div class="image-overlay">
-                <div class="overlay-content">
-                    <div class="user-info">
-                        <div class="avatar"></div>
-                        <div class="username" th:text="${post.user.username}">sarah_jones</div>
-                    </div>
-                    <div class="caption" th:text="${post.caption}">Living my best life ✨ Coffee lover and adventure seeker 🌍</div>
-                    <div class="hashtags">
-                        <span class="hashtag" th:text="${post.hashtag}">#lifestyle</span>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 
-<!-- ✅ JavaScript -->
+<!-- ===============================
+       JS for auto popup
+================================ -->
 <script>
-    const ratedCards = new Set();
+    document.addEventListener("DOMContentLoaded", () => {
+        let message = /*[[${successMessage}]]*/ null;
 
-    window.addEventListener("load", () => {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                const card = entry.target;
-                const cardId = card.dataset.id;
+        if (message) {
+            document.getElementById("successMsg").innerText = message;
 
-                if (entry.isIntersecting && entry.intersectionRatio >= 0.7) {
-                    if (!card.dataset.timerStarted && !ratedCards.has(cardId)) {
-                        card.dataset.timerStarted = "true";
-                        startRatingTimer(card);
-                    }
-                }
-            });
-        }, { threshold: [0.7] });
-
-        document.querySelectorAll(".rating-card").forEach(card => observer.observe(card));
+            let modal = new bootstrap.Modal(document.getElementById("successPopup"));
+            modal.show();
+        }
     });
-
-    function startRatingTimer(card) {
-        const cardId = card.dataset.id;
-        const thermometer = card.querySelector(".thermometer");
-        const thermometerFill = card.querySelector(".thermometer-fill");
-        const bulbInner = card.querySelector(".thermometer-bulb-inner");
-        const phuljhariBorder = card.querySelector(".phuljhari-border");
-        const ratingBadge = card.querySelector(".rating-badge");
-        const lockedOverlay = card.querySelector(".locked-overlay");
-        const timerText = card.querySelector(".timer-text");
-        const progressBar = card.querySelector(".progress-bar");
-        const timerContainer = card.querySelector(".timer-container");
-
-        if (!thermometer || !thermometerFill) return;
-
-        let currentRating = 5;
-        let timeRemaining = 10;
-        let canRate = true;
-
-        updateThermometer(currentRating);
-        phuljhariBorder.classList.add('active');
-
-        const timerInterval = setInterval(() => {
-            timeRemaining--;
-
-            // Update opacity + timer text
-            phuljhariBorder.style.opacity = timeRemaining / 10;
-            timerText.textContent = timeRemaining + "s";
-
-            // YouTube-style progress shrink
-            progressBar.style.width = (timeRemaining / 10) * 100 + "%";
-
-            if (timeRemaining <= 0) {
-                clearInterval(timerInterval);
-                timerText.textContent = "Time's up!";
-                progressBar.style.width = "0%";
-                submitRating(currentRating);
-            }
-        }, 1000);
-
-        thermometer.addEventListener("click", handleThermometerClick);
-
-        function handleThermometerClick(e) {
-            if (!canRate || ratedCards.has(cardId)) return;
-
-            const rect = thermometer.getBoundingClientRect();
-            const y = e.clientY - rect.top;
-            const usableHeight = rect.height - 40;
-            const rating = Math.round(((usableHeight - y) / usableHeight) * 10);
-            const finalRating = Math.max(1, Math.min(10, rating));
-
-            updateThermometer(finalRating);
-        }
-
-        function updateThermometer(rating) {
-            currentRating = rating;
-            const percentage = (rating / 10) * 100;
-            thermometerFill.style.height = percentage + "%";
-            ratingBadge.textContent = rating;
-
-            if (rating <= 3) {
-                bulbInner.style.background = "linear-gradient(135deg, #ff0080, #ff4757)";
-            } else if (rating <= 7) {
-                bulbInner.style.background = "linear-gradient(135deg, #ff8c00, #ffd32a)";
-            } else {
-                bulbInner.style.background = "linear-gradient(135deg, #00ff88, #26de81)";
-            }
-        }
-
-        function submitRating(rating) {
-            if (ratedCards.has(cardId)) return;
-            canRate = false;
-            ratedCards.add(cardId);
-
-            phuljhariBorder.style.opacity = '0';
-            phuljhariBorder.classList.remove('active');
-            thermometer.classList.add("disabled");
-            thermometer.removeEventListener("click", handleThermometerClick);
-            timerContainer.style.display = 'none';
-            ratingBadge.textContent = rating;
-            ratingBadge.classList.add('show');
-
-            setTimeout(() => {
-                lockedOverlay.classList.add('show');
-            }, 500);
-
-            console.log(✅ Rating ${rating}/10 submitted for card ${cardId});
-
-            const form = card.querySelector(".postRatingForm");
-            const formData = new FormData(form);
-            formData.append("rating", rating);
-
-            fetch('/saveRating', {
-                method: 'POST',
-                body: formData
-            })
-            .then(res => res.text())
-            .then(data => console.log("✅ Rating submitted:", data))
-            .catch(err => console.error("⚠ Error submitting rating:", err));
-
-            // Auto-scroll to next card
-            setTimeout(() => {
-                const nextCard = card.nextElementSibling;
-                if (nextCard && nextCard.classList.contains('rating-card')) {
-                    nextCard.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'center'
-                    });
-                }
-            }, 800);
-        }
-    }
 </script>
+
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
