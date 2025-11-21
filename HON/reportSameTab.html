@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Modal Example</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        /* Menu Styles */
+        .menu-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .menu-icon {
+            cursor: pointer;
+            font-size: 24px;
+            padding: 10px;
+            user-select: none;
+        }
+
+        .menu-icon:hover {
+            background: #f0f0f0;
+            border-radius: 50%;
+        }
+
+        .menu-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            min-width: 200px;
+            z-index: 100;
+            overflow: hidden;
+        }
+
+        .menu-dropdown.show {
+            display: block;
+        }
+
+        .menu-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .menu-item:hover {
+            background: #f5f5f5;
+        }
+
+        .menu-item i {
+            width: 20px;
+        }
+
+        .text-danger {
+            color: #dc3545;
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Report Form Container */
+        .report-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            padding: 40px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            color: #333;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .reason-grid {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .reason-option {
+            position: relative;
+        }
+
+        .reason-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .reason-label {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .reason-label:hover {
+            border-color: #FA8231;
+            background: #fff5f0;
+        }
+
+        .reason-option input[type="radio"]:checked + .reason-label {
+            border-color: #FA8231;
+            background: #fff0e6;
+        }
+
+        .radio-circle {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ccc;
+            border-radius: 50%;
+            margin-right: 12px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .reason-option input[type="radio"]:checked + .reason-label .radio-circle {
+            border-color: #FA8231;
+        }
+
+        .reason-option input[type="radio"]:checked + .reason-label .radio-circle::after {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #FA8231;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .reason-text {
+            color: #333;
+            font-size: 15px;
+        }
+
+        .textarea-container {
+            margin-bottom: 30px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 120px;
+            transition: border-color 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #FA8231;
+        }
+
+        .char-count {
+            text-align: right;
+            color: #999;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn {
+            background: #667eea;
+            color: white;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .cancel-btn {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        .cancel-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: #4caf50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            animation: scaleIn 0.5s ease;
+        }
+
+        .success-icon::after {
+            content: '✓';
+            color: white;
+            font-size: 40px;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .success-text {
+            color: #333;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .success-subtext {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Demo content */
+        .demo-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Demo Content -->
+    <div class="demo-content">
+        <h2>Sample Post</h2>
+        <p>This is a sample post. Click the menu icon (⋮) in the top right to access the report option.</p>
+    </div>
+
+    <!-- Menu -->
+    <div class="menu-wrapper">
+        <div class="menu-icon" onclick="toggleMenu()">⋮</div>
+        <div class="menu-dropdown" id="menuDropdown">
+            <div class="menu-item text-danger" onclick="openReportModal()">
+                <i class="fas fa-flag"></i> Report Post
+            </div>
+            <div class="menu-item" onclick="blockUser()">
+                <i class="fas fa-user-slash"></i> Block User
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Modal -->
+    <div class="modal-overlay" id="reportModal">
+        <div class="report-container">
+            <div id="reportForm">
+                <h1>Report Content</h1>
+                <p class="subtitle">Help us understand what's wrong with this content</p>
+
+                <div class="section-title">Select a reason *</div>
+                <div class="reason-grid">
+                    <div class="reason-option">
+                        <input type="radio" id="harassment" name="reason" value="harassment">
+                        <label for="harassment" class="reason-label">
+                            <div class="radio-circle"></div>
+                            <span class="reason-text">Harassment or bullying</span>
+                        </label>
+                    </div>
+                    <div class="reason-option">
+                        <input type="radio" id="spam" name="reason" value="spam">
+                        <label for="spam" class="reason-label">
+                            <div class="radio-circle"></div>
+                            <span class="reason-text">Spam or misleading</span>
+                        </label>
+                    </div>
+                    <div class="reason-option">
+                        <input type="radio" id="hate" name="reason" value="hate">
+                        <label for="hate" class="reason-label">
+                            <div class="radio-circle"></div>
+                            <span class="reason-text">Hate speech</span>
+                        </label>
+                    </div>
+                    <div class="reason-option">
+                        <input type="radio" id="explicit" name="reason" value="explicit">
+                        <label for="explicit" class="reason-label">
+                            <div class="radio-circle"></div>
+                            <span class="reason-text">Explicit or adult content</span>
+                        </label>
+                    </div>
+                    <div class="reason-option">
+                        <input type="radio" id="violence" name="reason" value="violence">
+                        <label for="violence" class="reason-label">
+                            <div class="radio-circle"></div>
+                            <span class="reason-text">Violence or threats</span>
+                        </label>
+                    </div>
+                    <div class="reason-option">
+                        <input type="radio" id="other" name="reason" value="other">
+                        <label for="other" class="reason-label">
+                            <div class="radio-circle"></div>
+                            <span class="reason-text">Other</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="textarea-container">
+                    <div class="section-title">Additional comments (optional)</div>
+                    <textarea id="comments" placeholder="Provide any additional details that might help us review this report..." maxlength="500"></textarea>
+                    <div class="char-count"><span id="charCount">0</span>/500</div>
+                </div>
+
+                <div class="button-group">
+                    <button class="cancel-btn" onclick="closeReportModal()">Cancel</button>
+                    <button class="submit-btn" id="submitBtn" onclick="handleSubmit()" disabled>Submit Report</button>
+                </div>
+            </div>
+
+            <div class="success-message" id="successMessage">
+                <div class="success-icon"></div>
+                <div class="success-text">Report Submitted</div>
+                <div class="success-subtext">Thank you for helping keep our community safe. We'll review this report shortly.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <script>
+        // Menu functionality
+        function toggleMenu() {
+            const menu = document.getElementById('menuDropdown');
+            menu.classList.toggle('show');
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            const menuWrapper = document.querySelector('.menu-wrapper');
+            if (!menuWrapper.contains(e.target)) {
+                document.getElementById('menuDropdown').classList.remove('show');
+            }
+        });
+
+        // Modal functionality
+        function openReportModal() {
+            document.getElementById('reportModal').classList.add('show');
+            document.getElementById('menuDropdown').classList.remove('show');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        function closeReportModal() {
+            document.getElementById('reportModal').classList.remove('show');
+            document.body.style.overflow = ''; // Restore scrolling
+            resetForm();
+        }
+
+        // Close modal when clicking outside the container
+        document.getElementById('reportModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeReportModal();
+            }
+        });
+
+        // Block user functionality
+        function blockUser() {
+            alert('Block user functionality');
+            document.getElementById('menuDropdown').classList.remove('show');
+        }
+
+        // Character counter
+        const textarea = document.getElementById('comments');
+        const charCount = document.getElementById('charCount');
+        
+        textarea.addEventListener('input', function() {
+            charCount.textContent = this.value.length;
+        });
+
+        // Enable/disable submit button based on reason selection
+        // const radioButtons = document.querySelectorAll('input[name="reason"]');
+        // const submitBtn = document.getElementById('submitBtn');
+
+        // radioButtons.forEach(radio => {
+        //     radio.addEventListener('change', function() {
+        //         submitBtn.disabled = false;
+        //     });
+        // });
+
+        // Handle form submission
+        // function handleSubmit() {
+        //     const selectedReason = document.querySelector('input[name="reason"]:checked');
+        //     const comments = document.getElementById('comments').value;
+
+        //     if (selectedReason) {
+        //         // Here you would typically send the data to your server
+        //         console.log('Report submitted:', {
+        //             reason: selectedReason.value,
+        //             comments: comments
+        //         });
+
+        //         // Show success message
+        //         document.getElementById('reportForm').style.display = 'none';
+        //         document.getElementById('successMessage').classList.add('show');
+
+        //         // Close modal after 2 seconds
+        //         setTimeout(() => {
+        //             closeReportModal();
+        //         }, 2000);
+        //     }
+        // }
+
+        // Reset form
+        function resetForm() {
+            document.getElementById('reportForm').style.display = 'block';
+            document.getElementById('successMessage').classList.remove('show');
+            document.querySelectorAll('input[name="reason"]').forEach(radio => radio.checked = false);
+            document.getElementById('comments').value = '';
+            document.getElementById('charCount').textContent = '0';
+            submitBtn.disabled = true;
+        }
+    </script> -->
+
+    <script>
+    // Toggle dropdown
+    function toggleMenu(event) {
+        event.stopPropagation(); // prevent closing instantly
+        const menu = document.getElementById('menuDropdown');
+        menu.classList.toggle('show');
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        const menu = document.getElementById('menuDropdown');
+        const wrapper = document.querySelector('.menu-wrapper');
+
+        if (!wrapper.contains(e.target)) {
+            menu.classList.remove('show');
+        }
+    });
+
+    // Open Report Modal
+    function openReportModal() {
+        document.getElementById('reportModal').classList.add('show');
+        document.getElementById('menuDropdown').classList.remove('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Close Report Modal
+    function closeReportModal() {
+        document.getElementById('reportModal').classList.remove('show');
+        document.body.style.overflow = '';
+        resetForm();
+    }
+
+    // Click outside to close modal
+    document.getElementById('reportModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeReportModal();
+        }
+    });
+
+    // Simple Block User handler (no extra logic)
+    function blockUser() {
+        alert('Block user functionality');
+        document.getElementById('menuDropdown').classList.remove('show');
+    }
+
+    // Character Counter
+    const textarea = document.getElementById('comments');
+    const charCount = document.getElementById('charCount');
+
+    textarea.addEventListener('input', function() {
+        charCount.textContent = this.value.length;
+    });
+
+    // Reset form
+    function resetForm() {
+        document.querySelectorAll('input[name="reason"]').forEach(r => r.checked = false);
+        textarea.value = '';
+        charCount.textContent = '0';
+    }
+</script>
+
+    
+</body>
+</html>
