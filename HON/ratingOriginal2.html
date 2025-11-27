@@ -732,96 +732,6 @@
 }
 
 
-.report-modal {
-    position: relative;
-}
-
-.close-report {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: transparent;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    color: #ff4d4d;
-}
-
-
-/* for popup */
-
-    .confirm-overlay,
-.success-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.6);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 10;
-}
-
-.confirm-box,
-.success-box {
-    background: white;
-    padding: 20px 30px;
-    border-radius: 8px;
-    text-align: center;
-    width: 320px;
-    animation: popupAnim 0.3s ease;
-}
-
-.confirm-buttons {
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-around;
-}
-
-.yes-btn, .no-btn, .ok-btn {
-    margin-top: 10px;
-    padding: 8px 20px;
-   margin-right: 6px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.yes-btn { background: #ff4747; color: white; }
-.no-btn { background: #ccc; }
-.ok-btn { background: #4CAF50; color: white; }
-
-
-@keyframes popupAnim {
-    from { transform: scale(0.7); opacity: 0; }
-    to   { transform: scale(1); opacity: 1; }
-}
-
-
-.success-toast {
-    position: fixed;
-    bottom: 20px;        /* bottom corner */
-    right: 20px;
-    background: #4CAF50;
-    color: white;
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-size: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.4s ease;
-    z-index: 999999;
-}
-
-.success-toast.show {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-
     </style>
 </head>
 <body>
@@ -869,15 +779,15 @@
             <img th:src="@{/userphoto/{id}(id=${post.postId})}" alt="Profile">
 
             <!-- for 3 dots -->
-            <!-- 3-Dots Menu -->
-            <div class="three-dots-menu">
-                <i class="bi bi-three-dots-vertical dots-icon"></i>
-<!--th:href="@{/user/getreport}"-->
-                <div class="dots-dropdown">
-                    <a ><div class="dropdown-item report-btn">🚫 Report</div></a>
-                    <div class="dropdown-item block-btn">⛔ Block User</div>
-                </div>
-            </div>
+             <!-- 3-Dots Menu -->
+<div class="three-dots-menu">
+    <i class="bi bi-three-dots-vertical dots-icon"></i>
+
+    <div class="dots-dropdown">
+        <div class="dropdown-item report-btn">🚫 Report</div>
+        <div class="dropdown-item block-btn">⛔ Block User</div>
+    </div>
+</div>
 
 
             <!-- Timer Section -->
@@ -928,65 +838,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- for modal  inside loop for post id -->
-        <!-- REPORT MODAL -->
-        <div class="report-modal-overlay" id="reportModal">
-            <div class="report-modal">
-               
-                     <button class="close-report">&times;</button>
-                <!--        th:action="@{/user/reportPost}"-->
-                <form id="reportForm"  th:action="@{/user/reportPost}" method="post">
-
-                
-
-                    <h2 class="modal-title">Report Post</h2>
-                    <p class="modal-subtitle">Select a reason for reporting this post</p>
-                    
-
-                    <input type="hidden" name="postId" th:value="${post.postId}">
-                    <!--            <input type="hidden" id="reporter_user_id" name="reporter_user_id" th:value="${user_master.userId}">-->
-
-                   
-                    <label class="reason-option">
-                        <input type="radio" name="reason" value="Harassment">
-                        Harassment / Bullying
-                    </label>
-
-                    <label class="reason-option">
-                        <input type="radio" name="reason" value="Spam">
-                        Spam or misleading content
-                    </label>
-
-                    <label class="reason-option">
-                        <input type="radio" name="reason" value="Hate Speech">
-                        Hate speech
-                    </label>
-
-                    <label class="reason-option">
-                        <input type="radio" name="reason" value="Explicit Content">
-                        Explicit or sexual content
-                    </label>
-
-                    <label class="reason-option">
-                        <input type="radio" name="reason" value="Violence">
-                        Violence or dangerous acts
-                    </label>
-
-                    <label class="reason-option">
-                        <input type="radio" name="reason"  value="other">
-                        Other
-                    </label>
-
-                    <textarea class="extra-comments" name="comment" placeholder="Additional comments (optional)"></textarea>
-
-                    <button type="submit" class="submit-report-btn">Submit Report</button>
-                </form>
-            </div>
-        </div>
-
-
-
     </div>
 </div>
 
@@ -1006,28 +857,54 @@
 </div>
 
 
-<!-- CONFIRMATION POPUP -->
-<div class="confirm-overlay" id="confirmPopup" style="z-index:999999999 !important;">
-    <div class="confirm-box">
-        <p style="color:black;">Are you sure you want to submit this report?</p>
-        <div class="confirm-buttons col-lg-12">
-            <button id="confirmYes" class="yes-btn col-lg-6 ">Yes</button>
-            <button id="confirmNo" class="no-btn col-lg-6">No</button>
-        </div>
+<!-- for modal  -->
+<!-- REPORT MODAL -->
+<div class="report-modal-overlay" id="reportModal">
+    <div class="report-modal">
+        <button class="close-report">&times;</button>
+
+        <h2 class="modal-title">Report Post</h2>
+        <p class="modal-subtitle">Select a reason for reporting this post</p>
+
+        <form id="reportForm">
+
+            <label class="reason-option">
+                <input type="radio" name="reason" value="Harassment">
+                Harassment / Bullying
+            </label>
+
+            <label class="reason-option">
+                <input type="radio" name="reason" value="Spam">
+                Spam or misleading content
+            </label>
+
+            <label class="reason-option">
+                <input type="radio" name="reason" value="Hate Speech">
+                Hate speech
+            </label>
+
+            <label class="reason-option">
+                <input type="radio" name="reason" value="Explicit Content">
+                Explicit or sexual content
+            </label>
+
+            <label class="reason-option">
+                <input type="radio" name="reason" value="Violence">
+                Violence or dangerous acts
+            </label>
+
+            <label class="reason-option">
+                <input type="radio" name="reason"  value="other">
+                Other
+            </label>
+
+            <textarea class="extra-comments" placeholder="Additional comments (optional)"></textarea>
+
+            <button type="button" class="submit-report-btn">Submit Report</button>
+        </form>
     </div>
 </div>
 
-<div id="successToast" class="success-toast" style="display:none;">
-    Report submitted successfully!
-</div>
-
-<!-- SUCCESS POPUP -->
-<!-- <div class="success-overlay" id="successPopup">
-    <div class="success-box">
-        <p>Report submitted successfully!</p>
-        <button id="successOk" class="ok-btn">OK</button>
-    </div>
-</div> -->
 
 
 <!--<div th:if="${popupPoints}">Hani</div>-->
@@ -1227,90 +1104,38 @@ timeRemaining--;
 <!-- for 3 dots -->
 
 <script>
-    document.querySelectorAll(".dots-icon").forEach(dot => {
-        dot.addEventListener("click", (e) => {
-            const dropdown = e.target.parentElement.querySelector(".dots-dropdown");
-            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
-        });
+document.querySelectorAll(".dots-icon").forEach(dot => {
+    dot.addEventListener("click", (e) => {
+        const dropdown = e.target.parentElement.querySelector(".dots-dropdown");
+        dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
     });
-
-    // OPEN MODAL
-    document.querySelectorAll(".report-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-            isReportModalOpen = true;  // ⛔ Pause rating
-
-            document.getElementById("reportModal").classList.add("show");
-            document.querySelectorAll(".dots-dropdown").forEach(d => d.style.display = "none");
-        });
-    });
-
-    // CLOSE MODAL
-    document.querySelector(".close-report").addEventListener("click", () => {
-        isReportModalOpen = false;
-        document.getElementById("reportModal").classList.remove("show");
-    });
-
-
-   // Report Submit Button (inside modal)
-document.querySelector(".submit-report-btn").addEventListener("click", (e) => {
-    e.preventDefault();  // stop form submit
-    document.getElementById("confirmPopup").style.display = "flex";  // show confirm popup
 });
 
-// YES — Confirm submit
-document.getElementById("confirmYes").addEventListener("click", () => {
+// OPEN MODAL
+document.querySelectorAll(".report-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        isReportModalOpen = true;  // ⛔ Pause rating
 
-    // Hide confirm popup
-    document.getElementById("confirmPopup").style.display = "none";
-
-    // Submit form manually
-    // document.getElementById("reportForm").submit();
-
-    // Show success popup
-    document.getElementById("successPopup").style.display = "flex";
+        document.getElementById("reportModal").classList.add("show");
+        document.querySelectorAll(".dots-dropdown").forEach(d => d.style.display = "none");
+    });
 });
 
-// NO — Cancel submit
-document.getElementById("confirmNo").addEventListener("click", () => {
-    document.getElementById("confirmPopup").style.display = "none";
-});
-
-// OK — After success
-document.getElementById("successOk").addEventListener("click", () => {
-    document.getElementById("successPopup").style.display = "none";
-
-    // Close modal manually
+// CLOSE MODAL
+document.querySelector(".close-report").addEventListener("click", () => {
+    isReportModalOpen = false;
     document.getElementById("reportModal").classList.remove("show");
-
-    // OPTIONAL: Restart timer if needed
-    // restartTimer();
 });
 
+
+// Submit button
+document.querySelector(".submit-report-btn").addEventListener("click", () => {
+    alert("Report submitted successfully!");
+    document.getElementById("reportModal").classList.remove("show");
+});
 </script>
 
 
-
-<script>
-    // Show success toast only after redirect
-    if (window.location.search.includes("reportSuccess=true")) {
-        const toast = document.getElementById("successToast");
-        toast.style.display = "block";
-
-        setTimeout(() => {
-            toast.classList.add("show");
-        }, 50); // fade-in
-
-        // Auto hide after 2 seconds
-        setTimeout(() => {
-            toast.classList.remove("show");
-        }, 6000);
-
-        // Remove from display after fade-out
-        setTimeout(() => {
-            toast.style.display = "none";
-        }, 2600);
-    }
-</script>
 
 </body>
 </html>

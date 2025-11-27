@@ -1,0 +1,116 @@
+public interface QuizQuestionRepository extends JpaRepository<QuizQuestion, Long> {
+
+    // Load the first question
+    QuizQuestion findFirstByOrderByIdAsc();
+
+    // Load next question by ID
+    @Query("SELECT q FROM QuizQuestion q WHERE q.id > :currentId ORDER BY q.id ASC")
+    List<QuizQuestion> findNext(@Param("currentId") Long currentId);
+}
+
+
+
+
+<!-- //ajax controller -->
+
+@PostMapping("/quiz/next")
+@ResponseBody
+public Map<String, Object> nextQuestion(
+        @RequestParam Long questionId,
+        @RequestParam String selectedOption,
+        @AuthenticationPrincipal UserDetails userDetails) {
+
+    Map<String, Object> res = new HashMap<>();
+
+    // Save answer
+    UserMaster user = userRepository.findByEmail(userDetails.getUsername());
+    QuizQuestion current = quizQuestionRepository.findById(questionId).orElse(null);
+
+    QuizAnswer ans = new QuizAnswer();
+    ans.setUser(user);
+    ans.setQuestion(current);
+    ans.setSelectedOption(selectedOption);
+    quizAnswerRepository.save(ans);
+
+    // Load next question
+    List<QuizQuestion> nextList = quizQuestionRepository.findNext(questionId);
+    if (nextList.isEmpty()) {
+        res.put("finished", true);
+        return res;
+    }
+
+    QuizQuestion next = nextList.get(0);
+
+    res.put("finished", false);
+    res.put("id", next.getId());
+    res.put("questionText", next.getQuestionText());
+    res.put("optionA", next.getOptionA());
+    res.put("optionB", next.getOptionB());
+
+    return res;
+}
+
+
+
+
+<div id="quizBox">
+
+    <h3 id="questionText"></h3>
+
+    <label>
+        <input type="radio" name="ans" value="A" onclick="submitAndNext('A')">
+        <span id="optionAText"></span>
+    </label><br>
+
+    <label>
+        <input type="radio" name="ans" value="B" onclick="submitAndNext('B')">
+        <span id="optionBText"></span>
+    </label>
+
+    <input type="hidden" id="currentQuestionId">
+</div>
+
+
+<script>
+    window.onload = function () {
+        document.getElementById("currentQuestionId").value = [[${firstQ.id}]];
+        document.getElementById("questionText").textContent = '[[${firstQ.questionText}]]';
+        document.getElementById("optionAText").textContent = '[[${firstQ.optionA}]]';
+        document.getElementById("optionBText").textContent = '[[${firstQ.optionB}]]';
+    }
+</script>
+
+
+
+<script>
+function submitAndNext(selectedOption) {
+
+    const id = document.getElementById("currentQuestionId").value;
+
+    fetch("/quiz/next", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `questionId=${id}&selectedOption=${selectedOption}`
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        if (data.finished) {
+            document.getElementById("quizBox").innerHTML =
+                "<h3>Quiz Completed 🎉</h3>";
+            return;
+        }
+
+        // Update UI with next question
+        document.getElementById("currentQuestionId").value = data.id;
+        document.getElementById("questionText").textContent = data.questionText;
+        document.getElementById("optionAText").textContent = data.optionA;
+        document.getElementById("optionBText").textContent = data.optionB;
+
+        // Unselect radio buttons
+        document.querySelectorAll("input[name='ans']").forEach(el => el.checked = false);
+    });
+}
+</script>
+
+

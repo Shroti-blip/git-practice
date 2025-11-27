@@ -8,9 +8,18 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
     <style>
+
+        :root {
+    --primary: #FA8231;
+    --secondary: #F97F51;
+    --accent: #FF6B9D;
+    --dark: #3D3D3D;
+    --light: #FFF5E6;
+    --gradient: linear-gradient(135deg, #FA8231 0%, #F97F51 50%, #FF6B9D 100%);
+        }
+
+
         * {
             margin: 0;
             padding: 0;
@@ -333,88 +342,99 @@
         }
 
         .thermometer-container {
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 60px;
-            height: 40%;
-            max-height: 300px;
-            z-index: 10;
-        }
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 35px;                    /* slimmer */
+    height: 300px;
+    z-index: 10;
+}
 
-        .thermometer {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 255, 255, 0.1);
-            border: 2px solid #00ffff;
-            border-radius: 30px;
-            cursor: pointer;
-            overflow: hidden;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
-            transition: all 0.3s ease;
-        }
+/* Outer tube */
+.thermometer {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 255, 255, 0.05);
+    border: 2px solid #00ffff;
+    border-radius: 40px;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+    transition: 0.3s ease;
+}
 
-        .thermometer:hover {
-            background: rgba(0, 255, 255, 0.2);
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
-        }
+.thermometer:hover {
+    transform: scale(1.06);
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
+}
 
-        .thermometer.disabled {
-            pointer-events: none;
-            opacity: 0.5;
-        }
+/* Inner glowing glass tube */
+.thermo-glass {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to right,
+        rgba(255,255,255,0.15),
+        rgba(255,255,255,0.05) 40%,
+        transparent 60%
+    );
+    z-index: 5;
+    pointer-events: none;
+}
 
-        .thermometer-fill {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, #ff0080, #ff4757, #ff8c00, #ffd32a, #00ff88);
-            transition: height 0.3s ease;
-            border-radius: 0 0 30px 30px;
-        }
+/* Liquid fill */
+.thermometer-fill {
+    position: absolute;
+    bottom: 0;
+    left: 2px;
+    right: 2px;
+    background: linear-gradient(to top, #ff0055, #ff8800, #ffeb3b, #00ff88);
+    border-radius: 40px;
+    transition: height 0.3s ease;
+    box-shadow: 0 0 12px rgba(255, 0, 128, 0.4);
+}
 
-        .thermometer-bulb {
-            position: absolute;
-            bottom: -18px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 50px;
-            height: 50px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 50%;
-            box-shadow: 0 0 20px rgba(255, 0, 128, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2;
-        }
+/* Bulb */
+.thermometer-bulb {
+    position: absolute;
+    bottom: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 45px;
+    height: 45px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    box-shadow: 0 0 25px rgba(255, 0, 120, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-        .thermometer-bulb-inner {
-            width: 35px;
-            height: 35px;
-            background: linear-gradient(135deg, #ff0080, #ff4757);
-            border-radius: 50%;
-            transition: background 0.3s ease;
-        }
+.thermometer-bulb-inner {
+    width: 28px;
+    height: 28px;
+    background: radial-gradient(circle, #ff0055, #ff2255, #ff5566);
+    border-radius: 50%;
+    box-shadow: 0 0 18px rgba(255, 0, 120, 0.7);
+}
 
-        .scale-markers {
-            position: absolute;
-            left: 8px;
-            top: 10px;
-            bottom: 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            font-size: 10px;
-            color: #000;
-            font-weight: 700;
-            text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
-            z-index:300;
-        }
+/* Scale Numbers */
+.scale-markers {
+    position: absolute;
+    left: -25px;
+    top: 8px;
+    bottom: 45px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #00eaff;
+    font-size: 12px;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+    pointer-events: none;
+}
+
 
         .rating-badge {
             position: absolute;
@@ -490,7 +510,8 @@
   position: fixed;
   top: 0; left: 0;
   width: 100vw; height: 100vh;
-  background: rgba(0,0,0,0.6);
+  /* background: rgba(0,0,0,0.6); */
+  background: #fff;
   display: flex; align-items: center; justify-content: center;
   z-index: 9999;
   opacity: 0; visibility: hidden;
@@ -584,89 +605,143 @@
   transform: rotate(90deg);
 }
 
-/* css for 3 dots */
-
-        .menu-wrapper {
+/* 3-dots at top right */
+.three-dots-menu {
     position: absolute;
-    top: 12px;
-    right: 12px;
+    top: 20px;
+    right: 20px;
     z-index: 20;
 }
 
-.menu-icon {
-    font-size: 20px;
-    font-weight: bold;
+.dots-icon {
+    font-size: 28px;
+    color: var(--accent);
     cursor: pointer;
-    /* padding: 1px 1px; */
-    /* background: rgba(0,0,0,0.4); */
-    color: #fff;
-    border-radius: 8px;
+    padding: 8px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(5px);
     transition: 0.2s;
 }
 
-.menu-icon:hover {
-    background: rgba(0,0,0,0.3);
+.dots-icon:hover {
+    color: var(--primary);
+    transform: scale(1.1);
 }
 
-.menu-dropdown {
-    display: none;
+/* Dropdown */
+.dots-dropdown {
     position: absolute;
     right: 0;
-    margin-top: 6px;
-    /* background: #fff; */
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    overflow: hidden;
+    top: 50px;
     width: 130px;
-    animation: dropdownFade 0.2s ease;
+    background: rgba(0,0,0,0.8);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 5px 0;
+    display: none;
+    backdrop-filter: blur(10px);
 }
 
-.menu-item {
-    padding: 10px 14px;
-    font-size: 14px;
+.dropdown-item {
+    padding: 10px;
+    color: var(--light);
     cursor: pointer;
-    transition: background 0.2s;
+    transition: 0.2s;
 }
 
-.menu-item:hover {
-    background: #f0f0f0;
+.dropdown-item:hover {
+    background: rgba(255, 107, 157, 0.25); /* var(--accent) with transparency */
 }
 
-@keyframes dropdownFade {
-    from { opacity: 0; transform: translateY(-4px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* Base menu item style */
-.menu-item {
-    padding: 10px 14px;
-    font-size: 14px;
-    cursor: pointer;
+/* Modal Overlay */
+.report-modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.7);
+    /* background-color: #fff; */
     display: flex;
     align-items: center;
-    gap: 8px;
-    transition: background 0.2s;
+    justify-content: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.4s ease;
+    z-index: 99999;
 }
 
-/* Report Post — red color */
-.menu-item.report {
-    color: #d63031; /* bright red */
-    font-weight: 600;
+.report-modal-overlay.show {
+    visibility: visible;
+    opacity: 1;
 }
 
-.menu-item.report i {
-    color: #d63031;
+/* Modal */
+.report-modal {
+    width: 90%;
+    max-width: 420px;
+    background: linear-gradient(135deg, var(--dark), #000);
+    padding: 25px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--light);
+    box-shadow: 0 0 30px rgba(255, 107, 157, 0.4); /* accent shadow */
+    animation: popIn 0.4s ease;
 }
 
-/* Block User — normal color */
-.menu-item.block i {
-    color: #444;
+.modal-title {
+    font-size: 1.6rem;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
 }
 
-/* Hover effect */
-.menu-item:hover {
-    background: #f0f0f0;
+.reason-option {
+    display: block;
+    padding: 8px 0;
+    cursor: pointer;
+    font-size: 1rem;
 }
+
+.extra-comments {
+    width: 100%;
+    height: 90px;
+    background: rgba(255,255,255,0.1);
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    color: var(--light);
+    margin-top: 10px;
+}
+
+.submit-report-btn {
+    width: 100%;
+    margin-top: 15px;
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    background: var(--gradient);
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.submit-report-btn:hover {
+    transform: scale(1.03);
+}
+
+.close-report {
+    position: absolute;
+    right: 15px;
+    top: 12px;
+    font-size: 24px;
+    background: none;
+    border: none;
+    color: var(--light);
+    cursor: pointer;
+}
+
 
     </style>
 </head>
@@ -707,23 +782,24 @@
         </div>
     </div>
 </nav>
-
+<!--    -->
 <div class="main-container">
     <div th:each="post : ${posts}" class="rating-card" th:attr="data-id=${post.postId}">
         <div class="image-wrapper">
-            <!-- for 3 dots -->
-             <!-- 3-Dot Menu -->
-<div class="menu-wrapper">
-    <div class="menu-icon">⋮</div>
-    <div class="menu-dropdown">
-        <a href="reportTheme.html" class="text-decoration-none text-danger"><div class="menu-item"><i class="fas fa-flag"></i> Report Post</div></a>
-        <div class="menu-item"><i class="fas fa-user-slash"></i> Block User</div>
-    </div>
-</div>
-
-
             <div class="phuljhari-border"></div>
             <img th:src="@{/userphoto/{id}(id=${post.postId})}" alt="Profile">
+
+            <!-- for 3 dots -->
+            <!-- 3-Dots Menu -->
+            <div class="three-dots-menu">
+                <i class="bi bi-three-dots-vertical dots-icon"></i>
+
+                <div class="dots-dropdown">
+                    <div class="dropdown-item report-btn">🚫 Report</div>
+                    <div class="dropdown-item block-btn">⛔ Block User</div>
+                </div>
+            </div>
+
 
             <!-- Timer Section -->
             <div class="timer-container">
@@ -739,20 +815,23 @@
             </div>
 
             <div class="thermometer-container">
-                <div class="thermometer">
-                    <div class="scale-markers">
-                        <div>10</div>
-                        <div>8</div>
-                        <div>6</div>
-                        <div>4</div>
-                        <div>2</div>
-                    </div>
-                    <div class="thermometer-fill"></div>
-                    <div class="thermometer-bulb">
-                        <div class="thermometer-bulb-inner"></div>
-                    </div>
-                </div>
-            </div>
+    <div class="thermometer">
+        <div class="scale-markers">
+            <div>10</div>
+            <div>8</div>
+            <div>6</div>
+            <div>4</div>
+            <div>2</div>
+        </div>
+        <div class="thermo-glass"></div>
+        <div class="thermometer-fill"></div>
+
+        <div class="thermometer-bulb">
+            <div class="thermometer-bulb-inner"></div>
+        </div>
+    </div>
+</div>
+
 
             <form class="postRatingForm">
                 <input type="hidden" id="userFrom" name="userFrom" th:value="${user_master.userId}">
@@ -790,33 +869,60 @@
         <div class="points-earned" style="font-size:13px;"><span id="pointsText"></span></div>
     </div>
 </div>
+
+
+<!-- for modal  -->
+<!-- REPORT MODAL -->
+<div class="report-modal-overlay" id="reportModal">
+    <div class="report-modal">
+        <button class="close-report">&times;</button>
+
+        <h2 class="modal-title">Report Post</h2>
+        <p class="modal-subtitle">Select a reason for reporting this post</p>
+
+        <form id="reportForm">
+
+            <label class="reason-option">
+                <input type="radio" name="reason" value="Harassment">
+                Harassment / Bullying
+            </label>
+
+            <label class="reason-option">
+                <input type="radio" name="reason" value="Spam">
+                Spam or misleading content
+            </label>
+
+            <label class="reason-option">
+                <input type="radio" name="reason" value="Hate Speech">
+                Hate speech
+            </label>
+
+            <label class="reason-option">
+                <input type="radio" name="reason" value="Explicit Content">
+                Explicit or sexual content
+            </label>
+
+            <label class="reason-option">
+                <input type="radio" name="reason" value="Violence">
+                Violence or dangerous acts
+            </label>
+
+            <label class="reason-option">
+                <input type="radio" name="reason"  value="other">
+                Other
+            </label>
+
+            <textarea class="extra-comments" placeholder="Additional comments (optional)"></textarea>
+
+            <button type="button" class="submit-report-btn">Submit Report</button>
+        </form>
+    </div>
+</div>
+
+
+
 <!--<div th:if="${popupPoints}">Hani</div>-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
-
-<!-- for 3 dots -->
- <script>
-document.addEventListener("click", function (e) {
-    // Close all dropdowns if clicked outside
-    if (!e.target.closest(".menu-wrapper")) {
-        document.querySelectorAll(".menu-dropdown").forEach(dd => dd.style.display = "none");
-    }
-});
-
-// Toggle dropdown on click
-document.querySelectorAll(".menu-icon").forEach(icon => {
-    icon.addEventListener("click", function (e) {
-        e.stopPropagation();
-        let dropdown = this.nextElementSibling;
-
-        // Close others
-        document.querySelectorAll(".menu-dropdown").forEach(dd => {
-            if (dd !== dropdown) dd.style.display = "none";
-        });
-
-        dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
-    });
-});
-</script>
 
 
 <script th:inline="javascript">
@@ -1000,5 +1106,39 @@ document.querySelectorAll(".menu-icon").forEach(icon => {
         }
     }
 </script>
+
+
+<!-- for 3 dots -->
+
+<script>
+    document.querySelectorAll(".dots-icon").forEach(dot => {
+        dot.addEventListener("click", (e) => {
+            const dropdown = e.target.parentElement.querySelector(".dots-dropdown");
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        });
+    });
+
+    // OPEN MODAL
+    document.querySelectorAll(".report-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            document.getElementById("reportModal").classList.add("show");
+            document.querySelectorAll(".dots-dropdown").forEach(d => d.style.display = "none");
+        });
+    });
+
+    // CLOSE MODAL
+    document.querySelector(".close-report").addEventListener("click", () => {
+        document.getElementById("reportModal").classList.remove("show");
+    });
+
+    // Submit button
+    document.querySelector(".submit-report-btn").addEventListener("click", () => {
+        alert("Report submitted successfully!");
+        document.getElementById("reportModal").classList.remove("show");
+    });
+</script>
+
+
+
 </body>
 </html>

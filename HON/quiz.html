@@ -1,0 +1,111 @@
+
+
+
+
+
+
+<form th:action="@{/quizwithcrush}" method="post">
+
+    <div th:each="q, i : ${allquiz}">
+        <h3 th:text="${q.questionText}"></h3>
+
+        <label>
+            <input type="radio" th:name="'answer_' + ${i.index}" th:value="${q.optionA}">
+            <span th:text="${q.optionA}"></span>
+        </label><br>
+
+        <label>
+            <input type="radio" th:name="'answer_' + ${i.index}" th:value="${q.optionB}">
+            <span th:text="${q.optionB}"></span>
+        </label>
+
+        <hr>
+    </div>
+
+    <button type="submit">Submit</button>
+</form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- loop for answer name -->
+ @PostMapping("/quizwithcrush")
+public String quizWithCrush(@RequestParam Map<String, String> params) {
+
+    // Filter only answers
+    params.entrySet().stream()
+        .filter(e -> e.getKey().startsWith("answer_"))
+        .forEach(e -> {
+            System.out.println("Question index: " + e.getKey());
+            System.out.println("Selected answer: " + e.getValue());
+        });
+
+    return "redirect:/user/mutual-crush";
+}
+
+
+
+@PostMapping("/quizwithcrush")
+public String quizWithCrush(@RequestParam Map<String, String> params) {
+
+    // Extract only answer_* keys
+    List<String> answers = new ArrayList<>();
+
+    params.forEach((key, value) -> {
+        if (key.startsWith("answer_")) {
+            answers.add(value);
+        }
+    });
+
+    // print answers (optional)
+    answers.forEach(System.out::println);
+
+    return "redirect:/user/mutual-crush";
+}
+
+
+
+<!-- js for next quiz -->
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    let current = 0;
+    const questions = document.querySelectorAll(".question-block");
+    const total = questions.length;
+
+    // show first question
+    questions[0].style.display = "block";
+
+    // whenever user selects any option (A/B)
+    document.querySelectorAll(".option-btn").forEach(btn => {
+        btn.addEventListener("change", () => {
+
+            // hide current question
+            questions[current].style.display = "none";
+
+            current++;
+
+            // if more questions → show next
+            if (current < total) {
+                questions[current].style.display = "block";
+            } else {
+                // no more questions → show submit
+                document.getElementById("finalSubmitBtn").style.display = "block";
+            }
+        });
+    });
+
+});
+</script>

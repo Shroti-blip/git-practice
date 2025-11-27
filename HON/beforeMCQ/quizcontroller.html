@@ -1,0 +1,68 @@
+package com.example.ProjectHON.Quiz_master;
+
+import com.example.ProjectHON.User_masterpackage.UserMaster;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+@Controller
+public class QuizController {
+
+    @Autowired
+    QuizRepository quizRepository;
+    @Autowired
+    QuizAnswerRepository quizAnswerRepository;
+
+//    @PostMapping("/quizwithcrush")
+//    public String saveQuiz(Model model, @RequestParam("answer") String answer){
+//        QuizAnswer quizAnswer = new QuizAnswer();
+//        quizAnswer.setAnswer(answer);
+//        quizAnswerRepository.save(quizAnswer);
+//        return "redirect:/user/mutual-crush";
+//    }
+
+
+    //@RequestParam Map<String, String> params,
+    @PostMapping("/quizwithcrush")
+    public String quizWithCrush(@RequestParam("selectedOption") String selectedOption,
+                                @RequestParam("questionId") int questionId,
+                                HttpSession session) {
+
+        UserMaster current = (UserMaster) session.getAttribute("user_master");
+       QuizQuestion question =   quizRepository.findById(questionId).orElse(null);
+
+        // Extract only answer_* keys
+//        List<String> answers = new ArrayList<>();
+//
+//        params.forEach((key, value) -> {
+//            if (key.startsWith("answer_")) {
+//                answers.add(value);
+//            }
+//        });
+//        // print answers (optional)
+//        answers.forEach(System.out::println);
+
+
+        QuizAnswer quizAnswer = new QuizAnswer();
+//        quizAnswer.setAnswer(answers.get(2));
+        quizAnswer.setQuestion(question);
+        quizAnswer.setAnsweredAt(LocalDateTime.now());
+        quizAnswer.setUser(current);
+        quizAnswerRepository.save(quizAnswer);
+
+        return "redirect:/user/mutual-crush";
+    }
+
+
+}
